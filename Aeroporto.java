@@ -4,30 +4,31 @@ import java.util.Random;
 
 public class Aeroporto {
     private List<Pista> pistas;
-    private List<FilaDeEspera> filasAterrisagem;
-    private List<FilaDeEspera> filasDecolagem;
-    private List<Aeronave> aeronavesCriticas;
+    private List<FilaDeEspera> filas_aterrisagem;
+    private List<FilaDeEspera> filas_decolagem;
+    private List<Aeronave> aeronaves_criticas;
 
     public Aeroporto() {
+
         pistas = new ArrayList<>();
-        filasAterrisagem = new ArrayList<>();
-        filasDecolagem = new ArrayList<>();
-        aeronavesCriticas = new ArrayList<>();
+        filas_aterrisagem = new ArrayList<>();
+        filas_decolagem = new ArrayList<>();
+        aeronaves_criticas = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
             pistas.add(new Pista());
         }
 
         for (int i = 0; i < 2; i++) {
-            filasAterrisagem.add(new FilaDeEspera());
+            filas_aterrisagem.add(new FilaDeEspera());
         }
 
         for (int i = 0; i < 2; i++) {
-            filasDecolagem.add(new FilaDeEspera());
+            filas_decolagem.add(new FilaDeEspera());
         }
     }
 
-    public void simularMinuto() {
+    public void simular_minuto() {
 
         Random random = new Random();
 
@@ -38,26 +39,27 @@ public class Aeroporto {
             Aeronave aeronave = new Aeronave(combustivel, tempoMaximoEspera);
 
 
-            adicionarAeronaveFilaAterrisagem(aeronave);
+            adicionar_aeronave_fila_aterrisagem(aeronave);
         }
 
     }
 
-    private void adicionarAeronaveFilaAterrisagem(Aeronave aeronave) {
+    private void adicionar_aeronave_fila_aterrisagem(Aeronave aeronave) {
 
-        FilaDeEspera filaMinima = filasAterrisagem.get(0);
-        for (FilaDeEspera fila : filasAterrisagem) {
+        FilaDeEspera filaMinima = filas_aterrisagem.get(0);
+        for (FilaDeEspera fila : filas_aterrisagem) {
             if (fila.tamanho() < filaMinima.tamanho()) {
                 filaMinima = fila;
             }
         }
 
-        filaMinima.adicionarAeronave(aeronave);
+        filaMinima.adicionar_aeronave(aeronave);
     }
 
     private void verificarCombustivelCritico(Aeronave aeronave) { 
-        if (aeronave.getCombustivel() < 10) { 
-            aeronavesCriticas.add(aeronave);
+
+        if (aeronave.get_combustivel() < 10) { 
+            aeronaves_criticas.add(aeronave);
         }
     }
 }
