@@ -3,19 +3,24 @@ import java.util.List;
 import java.util.Random;
 
 public class Aeroporto {
-    private List<Pista> pistas;
+    private Pista pista1;
+    private Pista pista2;
+    private Pista pista3;
+
+    private int qtdAterrissagemEmergencial;
+
     private List<FilaDeEspera> filasAterrisagem;
     private List<FilaDeEspera> filasDecolagem;
     private List<Aeronave> aeronavesCriticas;
 
     public Aeroporto() {
-        pistas = new ArrayList<>();
+        // pistas = new ArrayList<>();
         filasAterrisagem = new ArrayList<>();
         filasDecolagem = new ArrayList<>();
         aeronavesCriticas = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-            pistas.add(new Pista());
+            // pistas.add(new Pista());
         }
 
         for (int i = 0; i < 2; i++) {
@@ -28,25 +33,38 @@ public class Aeroporto {
     }
 
     public void simularMinuto() {
+    }
 
-        Random random = new Random();
+    public void adicionarAeronaveFilaAterrisagem(Aeronave aeronave) {
 
-        for (int i = 0; i < 3; i++) {
-            int combustivel = random.nextInt(50) + 1; 
-            int tempoMaximoEspera = random.nextInt(10) + 1; 
-
-            Aeronave aeronave = new Aeronave(combustivel, tempoMaximoEspera);
-
-
-            adicionarAeronaveFilaAterrisagem(aeronave);
-        }
+        escolherPistaAterrissagem().escolherFilaAterrissagem().offer(aeronave);
 
     }
 
-    private void adicionarAeronaveFilaAterrisagem(Aeronave aeronave) {
+    public Pista escolherPistaAterrissagem(){
+        if(pista1.quantidadeAeronavesAterrissagem() > pista2.quantidadeAeronavesAterrissagem()){
+            return pista1;
+        }else if(pista1.quantidadeAeronavesAterrissagem() < pista2.quantidadeAeronavesAterrissagem()){
+            return pista2;
+        } else {
+            return pista1;
+        }
+    }
 
-        FilaDeEspera filaMinima = filasAterrisagem.get(0);
-        for (FilaDeEspera fila : filasAterrisagem) {
+    public Pista escolherPistaDecolagem(){
+        if(pista1.quantidadeAeronavesAterrissagem() > pista2.quantidadeAeronavesAterrissagem()){
+            return pista1;
+        }else if(pista1.quantidadeAeronavesAterrissagem() < pista2.quantidadeAeronavesAterrissagem()){
+            return pista2;
+        } else {
+            return pista1;
+        }
+    }
+
+    public void adicionarAeronaveFilaDecolagem(Aeronave aeronave) {
+
+        FilaDeEspera filaMinima = filasDecolagem.get(0);
+        for (FilaDeEspera fila : filasDecolagem) {
             if (fila.tamanho() < filaMinima.tamanho()) {
                 filaMinima = fila;
             }
@@ -59,6 +77,10 @@ public class Aeroporto {
         if (aeronave.getCombustivel() < 10) { 
             aeronavesCriticas.add(aeronave);
         }
+    }
+
+    public void recalcularTempoMedio(){
+
     }
 }
         

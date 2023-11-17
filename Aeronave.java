@@ -3,23 +3,62 @@ public class Aeronave {
 
     private int id;
     private int combustivel;
-    private int tempo_maximo_espera;
+    private int tempoEspera;
+    private int numPassageiros;
+    private String companhiaAerea;
+    private boolean passageiroEspecial;
 
-    public Aeronave(int combustivel, int tempo_maximo_espera) {
-        this.id = proximo_id++;
+    public Aeronave(int numPassageiros, int tempoEspera, int combustivel, String companhiaAerea, boolean passageiroEspecial) {
+        this.id = proximo_id;
+        proximo_id += 2;
+        this.numPassageiros = numPassageiros;
+        this.tempoEspera = tempoEspera;
         this.combustivel = combustivel;
-        this.tempo_maximo_espera = tempo_maximo_espera;
+        this.companhiaAerea = companhiaAerea;
+        this.passageiroEspecial = passageiroEspecial;
     }
 
-    public int get_id() {
+    public int getId() {
         return id;
     }
 
-    public int get_combustivel() {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getNumPassageiros() {
+        return numPassageiros;
+    }
+
+    public int gettempoEspera() {
+        return tempoEspera;
+    }
+
+    public void settempoEspera(int tempoEspera) {
+        this.tempoEspera = tempoEspera;
+    }
+
+    public void setNumPassageiros(int numPassageiros) {
+        this.numPassageiros = numPassageiros;
+    }
+
+    public int getCombustivel() {
         return combustivel;
     }
 
-    public int get_tempo_maximo_espera() {
-        return tempo_maximo_espera;
+    public void setCombustivel(int combustivel) {
+        this.combustivel = combustivel;
+    }
+
+    public String getCompanhiaAerea() {
+        return companhiaAerea;
+    }
+
+    public void setCompanhiaAerea(String companhiaAerea) {
+        this.companhiaAerea = companhiaAerea;
+    }
+
+    public boolean getPassageiroEspecial() {
+        return passageiroEspecial;
     }
 }
