@@ -19,17 +19,17 @@ public class Aeroporto {
         filasDecolagem = new ArrayList<>();
         aeronavesCriticas = new ArrayList<>();
 
-        for (int i = 0; i < 3; i++) {
-            // pistas.add(new Pista());
-        }
+        // for (int i = 0; i < 3; i++) {
+        //     // pistas.add(new Pista());
+        // }
 
-        for (int i = 0; i < 2; i++) {
-            filasAterrisagem.add(new FilaDeEspera());
-        }
+        // for (int i = 0; i < 2; i++) {
+        //     filas_aterrisagem.add(new FilaDeEspera());
+        // }
 
-        for (int i = 0; i < 2; i++) {
-            filasDecolagem.add(new FilaDeEspera());
-        }
+        // for (int i = 0; i < 2; i++) {
+        //     filas_decolagem.add(new FilaDeEspera());
+        // }
     }
 
     public void simularMinuto() {
@@ -70,13 +70,14 @@ public class Aeroporto {
             }
         }
 
-        filaMinima.adicionarAeronave(aeronave);
+        // filaMinima.adicionar_aeronave(aeronave);
     }
 
     private void verificarCombustivelCritico(Aeronave aeronave) { 
-        if (aeronave.getCombustivel() < 10) { 
-            aeronavesCriticas.add(aeronave);
-        }
+
+        // if (aeronave.get_combustivel() < 10) { 
+        //     aeronaves_criticas.add(aeronave);
+        // }
     }
 
     public void recalcularTempoMedio(){
