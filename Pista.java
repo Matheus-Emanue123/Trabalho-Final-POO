@@ -2,59 +2,67 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 public class Pista {
-    private Queue<Aeronave> filaAterrissagem1;
-    private Queue<Aeronave> filaAterrissagem2;
-    private Queue<Aeronave> filaDecolagem;
+
+    FilaDeEspera filaAterrissagem1;
+    FilaDeEspera filaAterrissagem2;
+    FilaDeEspera filaDecolagem;
 
     public Pista() {
-        filaAterrissagem1 = new LinkedList<>();
-        filaAterrissagem1 = new LinkedList<>();
 
-        filaDecolagem = new LinkedList<>();
+        filaAterrissagem1 = new FilaDeEspera();
+        filaAterrissagem1.setFila(new LinkedList<>());
 
+        filaAterrissagem2 = new FilaDeEspera();
+        filaAterrissagem2.setFila(new LinkedList<>());
+
+        filaDecolagem = new FilaDeEspera();
+        filaDecolagem.setFila(new LinkedList<>());
     }
 
     public Queue<Aeronave> escolherFilaAterrissagem(){
-        if(filaAterrissagem1.size() > filaAterrissagem2.size()){
-            return filaAterrissagem1;
-        }else if(filaAterrissagem1.size() < filaAterrissagem2.size()){
-            return filaAterrissagem2;
+
+        if(filaAterrissagem1.tamanho() > filaAterrissagem2.tamanho()){
+            return filaAterrissagem1.getFila();
+
+        }else if(filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho()){
+            return filaAterrissagem2.getFila();
+
         } else {
             int count1 = 0;
             int count2 = 0;
 
-            for (Aeronave a : filaAterrissagem1) {
+            for (Aeronave a : filaAterrissagem1.getFila()) {
                 if (a.getPassageiroEspecial()) {
                     count1++;
                 }
             }
             
-            for (Aeronave a : filaAterrissagem2) {
+            for (Aeronave a : filaAterrissagem2.getFila()) {
                 if (a.getPassageiroEspecial()) {
                     count2++;
                 }
             }
             
             if (count1 > count2) {
-                return filaAterrissagem2;
+                return filaAterrissagem2.getFila();
             } else if (count1 < count2) {
-                return filaAterrissagem1;
+                return filaAterrissagem1.getFila();
             } else {
-                // return any queue when the counts are equal
-                return filaAterrissagem1;
+
+                return filaAterrissagem1.getFila();
             }
         }
     }
 
     public int quantidadeAeronaves(){
-        return filaAterrissagem1.size() + filaAterrissagem2.size() + filaDecolagem.size();
+        return filaAterrissagem1.tamanho() + filaAterrissagem2.tamanho() + filaDecolagem.tamanho();
     }
 
     public int quantidadeAeronavesAterrissagem(){
-        return filaAterrissagem1.size() + filaAterrissagem2.size();
+        return filaAterrissagem1.tamanho() + filaAterrissagem2.tamanho();
     }
 
     public int quantidadeAeronavesDecolagem(){
-        return filaDecolagem.size();
+        return filaDecolagem.tamanho();
     }
 }

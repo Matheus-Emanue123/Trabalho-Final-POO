@@ -14,22 +14,10 @@ public class Aeroporto {
     private List<Aeronave> aeronavesCriticas;
 
     public Aeroporto() {
-        // pistas = new ArrayList<>();
+    
         filasAterrisagem = new ArrayList<>();
         filasDecolagem = new ArrayList<>();
         aeronavesCriticas = new ArrayList<>();
-
-        // for (int i = 0; i < 3; i++) {
-        //     // pistas.add(new Pista());
-        // }
-
-        // for (int i = 0; i < 2; i++) {
-        //     filas_aterrisagem.add(new FilaDeEspera());
-        // }
-
-        // for (int i = 0; i < 2; i++) {
-        //     filas_decolagem.add(new FilaDeEspera());
-        // }
     }
 
     public void simularMinuto() {
@@ -83,6 +71,6 @@ public class Aeroporto {
     public void recalcularTempoMedio(){
 
     }
+
 }
         
-
