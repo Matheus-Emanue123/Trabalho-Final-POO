@@ -8,7 +8,6 @@ public class Pista {
     FilaDeEspera filaDecolagem;
 
     public Pista() {
-
         filaAterrissagem1 = new FilaDeEspera();
         filaAterrissagem1.setFila(new LinkedList<>());
 
@@ -20,11 +19,10 @@ public class Pista {
     }
 
     public Queue<Aeronave> escolherFilaAterrissagem(){
-
         if(filaAterrissagem1.tamanho() > filaAterrissagem2.tamanho()){
             return filaAterrissagem1.getFila();
 
-        }else if(filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho()){
+        } else if(filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho()){
             return filaAterrissagem2.getFila();
 
         } else {

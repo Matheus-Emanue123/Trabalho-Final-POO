@@ -14,7 +14,7 @@ public class FilaDeEspera {
 
     public void adicionarAeronave(Aeronave aeronave) {
         fila.offer(aeronave);
-        tempoDeEsperaTotal += aeronave.gettempoEspera();
+        tempoDeEsperaTotal += aeronave.getTempoEspera();
     }
 
     public Aeronave removerAeronave() {

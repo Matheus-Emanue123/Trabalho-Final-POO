@@ -30,11 +30,11 @@ public class Aeronave {
         return numPassageiros;
     }
 
-    public int gettempoEspera() {
+    public int getTempoEspera() {
         return tempoEspera;
     }
 
-    public void settempoEspera(int tempoEspera) {
+    public void setTempoEspera(int tempoEspera) {
         this.tempoEspera = tempoEspera;
     }
 
