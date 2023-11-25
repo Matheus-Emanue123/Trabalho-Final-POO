@@ -7,9 +7,15 @@ public class FilaDeEspera {
     private int qtdAvioes = 0;
     private int tempoMedioDeEspera = 0;
     private int tempoDeEsperaTotal = 0;
+    private String nome;
 
     public FilaDeEspera() {
-        fila = new LinkedList<>();
+        this.fila = new LinkedList<>();
+    }
+
+    public FilaDeEspera(String nome) {
+        this.fila = new LinkedList<>();
+        this.nome = nome;
     }
 
     public void adicionarAeronave(Aeronave aeronave) {
@@ -19,18 +25,6 @@ public class FilaDeEspera {
 
     public Aeronave removerAeronave() {
         return fila.poll();
-    }
-
-    public int tamanho() {
-        return fila.size();
-    }
-
-    public Queue<Aeronave> getFila() {
-        return this.fila;
-    }
-
-    public void setFila(Queue<Aeronave> fila) {
-        this.fila = fila;
     }
 
     public void imprimirQtd(FilaDeEspera fila) {
@@ -45,5 +39,25 @@ public class FilaDeEspera {
         tempoMedioDeEspera = tempoDeEsperaTotal / qtdAvioes;
         System.out.println("O tempo médio de espera eh: " + tempoMedioDeEspera);
 
+    }
+
+    public int tamanho() {
+        return fila.size();
+    }
+
+    public Queue<Aeronave> getFila() {
+        return this.fila;
+    }
+
+    public void setFila(Queue<Aeronave> fila) {
+        this.fila = fila;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return this.nome;
     }
 }

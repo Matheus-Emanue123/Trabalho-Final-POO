@@ -26,6 +26,22 @@ public class Aeronave {
         this.id = id;
     }
 
+    public void setIdDecolagem(int id){
+        if(id % 2 == 0){
+            this.id = id;
+        } else{
+            this.id = id + 1;
+        }
+    }
+
+    public void setIdAterrissagem(int id){
+        if(id % 2 == 0){
+            this.id = id + 1;
+        } else{
+            this.id = id;
+        }
+    }
+
     public int getNumPassageiros() {
         return numPassageiros;
     }

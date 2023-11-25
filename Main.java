@@ -7,24 +7,14 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    static int qtdAeronavesAterrissagem = 1;
-    static int qtdAeronavesDecolagem = 2;
     static Queue<Aeronave> filaAeronavesDecolagemArquivo = new LinkedList<Aeronave>();
     static Queue<Aeronave> filaAeronavesAterrissagemArquivo = new LinkedList<Aeronave>();
-
-    enum CompanhiaAerea {
-        GOL,
-        LATAM,
-        AZUL,
-        AmericanAirlines
-    }
 
     static Aeroporto aeroporto = new Aeroporto();
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
         Aeroporto aeroporto = new Aeroporto();
-        aeroporto.simularMinuto();
         
         int escolha = 0;
 
@@ -47,6 +37,9 @@ public class Main {
                     System.out.println("Opcao invalida");
                     break;
             }
+            
+            filaAeronavesAterrissagemArquivo = new LinkedList<Aeronave>();
+            filaAeronavesDecolagemArquivo = new LinkedList<Aeronave>();
         }
     }
 
@@ -61,10 +54,8 @@ public class Main {
         if(arquivo){
             leituraArquivoAeronaves();
         } else{
-            gerarAeronaves();
+            aeronavesAleatorias();
         }
-
-        aeroporto.simularMinuto();
     }
 
     public static Aeronave linhaAeronave(Scanner arqScanner){
@@ -85,8 +76,8 @@ public class Main {
             
             while(arqScanner.hasNextLine()){
                 Aeronave aeronave = linhaAeronave(arqScanner);
-                aeronave.setId(qtdAeronavesAterrissagem);
-                qtdAeronavesAterrissagem += 2;
+                aeronave.setIdAterrissagem(Aeroporto.idsAeronavesAterrissagem);
+                Aeroporto.idsAeronavesAterrissagem += 2;
 
                 filaAeronavesAterrissagemArquivo.add(aeronave);
             }
@@ -95,53 +86,30 @@ public class Main {
 
             while(arqScanner.hasNextLine()){
                 Aeronave aeronave = linhaAeronave(arqScanner);
-                aeronave.setId(qtdAeronavesDecolagem);
-                qtdAeronavesDecolagem += 2;
+                aeronave.setIdDecolagem(Aeroporto.idsAeronavesDecolagem);
+                Aeroporto.idsAeronavesDecolagem += 2;
 
                 filaAeronavesDecolagemArquivo.add(aeronave);
             }
+
+            arqScanner.close();
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public static void gerarAeronaves(){
-        Random random = new Random();
+    } 
     
-        System.out.println("Gerando aeronaves...");
+    public static void aeronavesAleatorias(){
+        while (true) {    
+            System.out.println("Aperte enter para simular um minuto. Digite 0 para sair.");
 
-        int aeronavesAterrissagem = random.nextInt(3) + 1;
+            String enter = scanner.nextLine();
 
-        for(int i = 0; i < aeronavesAterrissagem; i++){
-            int numPassageiros = random.nextInt(380) + 1;
-            int combustivel = random.nextInt(15) + 1;        
-
-            String companhiaAerea = CompanhiaAerea.values()[random.nextInt(CompanhiaAerea.values().length)].toString();
-
-            boolean passageiroEspecial = (random.nextInt(10) + 1 > 9 ? true : false);
-
-            Aeronave aeronave = new Aeronave(numPassageiros, 0, combustivel, companhiaAerea, passageiroEspecial);
-            aeronave.setId(qtdAeronavesAterrissagem);
-            qtdAeronavesAterrissagem += 2;
-
-            aeroporto.adicionarAeronaveFilaAterrisagem(aeronave);
+            if(enter.equals("0")){
+                System.out.println("Saindo da função aleatória...");
+                return;
+            } else {
+                aeroporto.simularMinuto();
+            }
         }
-
-        int aeronavesDecolagem = random.nextInt(3) + 1;
-
-        for(int i = 0; i < aeronavesDecolagem; i++){
-            int numPassageiros = random.nextInt(380) + 1;
-            int combustivel = 15;            
-
-            String companhiaAerea = CompanhiaAerea.values()[random.nextInt(CompanhiaAerea.values().length)].toString();
-
-            boolean passageiroEspecial = (random.nextInt(10) + 1 > 9 ? true : false);
-            
-            Aeronave aeronave = new Aeronave(numPassageiros, 0, combustivel, companhiaAerea, passageiroEspecial);
-            aeronave.setId(qtdAeronavesDecolagem);
-            qtdAeronavesAterrissagem += 2;
-
-            aeroporto.adicionarAeronaveFilaDecolagem(aeronave);
-        }
-    }    
+    }
 }
