@@ -15,15 +15,17 @@ public class Main {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
         Aeroporto aeroporto = new Aeroporto();
-        
+
         int escolha = 0;
 
-        while(escolha != 3){
-            
+        while (escolha != 3) {
+
             menuInicial();
             escolha = scanner.nextInt();
+            scanner.nextLine();
+            aeroporto.clearConsole();
 
-            switch(escolha){
+            switch (escolha) {
                 case 1:
                     iniciar(false);
                     break;
@@ -37,28 +39,29 @@ public class Main {
                     System.out.println("Opcao invalida");
                     break;
             }
-            
+
             filaAeronavesAterrissagemArquivo = new LinkedList<Aeronave>();
             filaAeronavesDecolagemArquivo = new LinkedList<Aeronave>();
         }
     }
 
-    public static void menuInicial(){
+    public static void menuInicial() {
+        aeroporto.clearConsole();
         System.out.println("Escolha uma opcao:");
         System.out.println("1 - Geração aleatória de aeronaves");
         System.out.println("2 - Leitura de arquivo de aeronaves");
         System.out.println("3 - Sair");
     }
 
-    public static void iniciar(boolean arquivo) throws FileNotFoundException{
-        if(arquivo){
+    public static void iniciar(boolean arquivo) throws FileNotFoundException {
+        if (arquivo) {
             leituraArquivoAeronaves();
-        } else{
+        } else {
             aeronavesAleatorias();
         }
     }
 
-    public static Aeronave linhaAeronave(Scanner arqScanner){
+    public static Aeronave linhaAeronave(Scanner arqScanner) {
         String[] aviaoArrayString = arqScanner.nextLine().split(":");
 
         int numPassageiros = Integer.parseInt(aviaoArrayString[0]);
@@ -69,12 +72,12 @@ public class Main {
         return new Aeronave(numPassageiros, 0, combustivel, companhiaAerea, passageiroEspecial);
     }
 
-    public static void leituraArquivoAeronaves() throws FileNotFoundException{
+    public static void leituraArquivoAeronaves() throws FileNotFoundException {
         System.out.println("Lendo arquivo de aeronaves.");
         try {
             Scanner arqScanner = new Scanner(new File("aeronavesAterrissagem.txt"));
-            
-            while(arqScanner.hasNextLine()){
+
+            while (arqScanner.hasNextLine()) {
                 Aeronave aeronave = linhaAeronave(arqScanner);
                 aeronave.setIdAterrissagem(Aeroporto.idsAeronavesAterrissagem);
                 Aeroporto.idsAeronavesAterrissagem += 2;
@@ -84,7 +87,7 @@ public class Main {
 
             arqScanner = new Scanner(new File("aeronavesDecolagem.txt"));
 
-            while(arqScanner.hasNextLine()){
+            while (arqScanner.hasNextLine()) {
                 Aeronave aeronave = linhaAeronave(arqScanner);
                 aeronave.setIdDecolagem(Aeroporto.idsAeronavesDecolagem);
                 Aeroporto.idsAeronavesDecolagem += 2;
@@ -96,15 +99,14 @@ public class Main {
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
-    } 
-    
-    public static void aeronavesAleatorias(){
-        while (true) {    
-            System.out.println("Aperte enter para simular um minuto. Digite 0 para sair.");
+    }
 
+    public static void aeronavesAleatorias() {
+        while (true) {
+            System.out.println("Aperte enter para simular um minuto. Digite 0 para sair.");
             String enter = scanner.nextLine();
 
-            if(enter.equals("0")){
+            if (enter.equals("0")) {
                 System.out.println("Saindo da função aleatória...");
                 return;
             } else {

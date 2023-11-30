@@ -8,7 +8,8 @@ public class Aeronave {
     private String companhiaAerea;
     private boolean passageiroEspecial;
 
-    public Aeronave(int numPassageiros, int tempoEspera, int combustivel, String companhiaAerea, boolean passageiroEspecial) {
+    public Aeronave(int numPassageiros, int tempoEspera, int combustivel, String companhiaAerea,
+            boolean passageiroEspecial) {
         this.id = proximo_id;
         proximo_id += 2;
         this.numPassageiros = numPassageiros;
@@ -26,24 +27,12 @@ public class Aeronave {
         this.id = id;
     }
 
-    public void setIdDecolagem(int id){
-        if(id % 2 == 0){
-            this.id = id;
-        } else{
-            this.id = id + 1;
-        }
-    }
-
-    public void setIdAterrissagem(int id){
-        if(id % 2 == 0){
-            this.id = id + 1;
-        } else{
-            this.id = id;
-        }
-    }
-
     public int getNumPassageiros() {
         return numPassageiros;
+    }
+
+    public void setNumPassageiros(int numPassageiros) {
+        this.numPassageiros = numPassageiros;
     }
 
     public int getTempoEspera() {
@@ -52,10 +41,6 @@ public class Aeronave {
 
     public void setTempoEspera(int tempoEspera) {
         this.tempoEspera = tempoEspera;
-    }
-
-    public void setNumPassageiros(int numPassageiros) {
-        this.numPassageiros = numPassageiros;
     }
 
     public int getCombustivel() {
@@ -76,5 +61,30 @@ public class Aeronave {
 
     public boolean getPassageiroEspecial() {
         return passageiroEspecial;
+    }
+
+    public void setPassageiroEspecial(boolean passageiroEspecial) {
+        this.passageiroEspecial = passageiroEspecial;
+    }
+
+    public void setIdDecolagem(int id) {
+        if (id % 2 == 0) {
+            this.id = id;
+        } else {
+            this.id = id + 1;
+        }
+    }
+
+    public void setIdAterrissagem(int id) {
+        if (id % 2 == 0) {
+            this.id = id + 1;
+        } else {
+            this.id = id;
+        }
+    }
+
+    public void imprimirAeronave() {
+        System.out.println("ID: " + this.id + " - Combustível: " + this.combustivel + " - Tempo de espera: "
+                + this.tempoEspera + " - Passageiro especial: " + this.passageiroEspecial);
     }
 }

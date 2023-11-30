@@ -21,18 +21,38 @@ public class Pista {
 
     public Pista(String nome, boolean aterrissagem) {
         this.nome = nome;
-        this.filaAterrissagem1 = new FilaDeEspera(aterrissagem ? "Fila de Aterrissagem 1" : "Fila de Aterrissagem de Emergência");
-
+        this.filaAterrissagem1 = new FilaDeEspera(
+                aterrissagem ? "Fila de Aterrissagem 1" : "Fila de Aterrissagem de Emergência");
         this.filaAterrissagem2 = aterrissagem ? new FilaDeEspera("Fila de Aterrissagem 2") : null;
 
         this.filaDecolagem = new FilaDeEspera("Fila de Decolagem");
     }
 
-    public FilaDeEspera escolherFilaAterrissagem(){
-        if(filaAterrissagem1.tamanho() > filaAterrissagem2.tamanho()){
+    public String getNome() {
+        return this.nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public FilaDeEspera getFilaAterrissagem1() {
+        return this.filaAterrissagem1;
+    }
+
+    public FilaDeEspera getFilaAterrissagem2() {
+        return this.filaAterrissagem2;
+    }
+
+    public FilaDeEspera getFilaDecolagem() {
+        return this.filaDecolagem;
+    }
+
+    public FilaDeEspera escolherFilaAterrissagem() {
+        if (filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho()) {
             return filaAterrissagem1;
 
-        } else if(filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho()){
+        } else if (filaAterrissagem1.tamanho() > filaAterrissagem2.tamanho()) {
             return filaAterrissagem2;
 
         } else {
@@ -44,45 +64,114 @@ public class Pista {
                     count1++;
                 }
             }
-            
+
             for (Aeronave a : filaAterrissagem2.getFila()) {
                 if (a.getPassageiroEspecial()) {
                     count2++;
                 }
             }
-            
-            if (count1 > count2) {
-                return filaAterrissagem2;
-            } else if (count1 < count2) {
-                return filaAterrissagem1;
-            } else {
 
+            if (count1 < count2) {
+                System.out.println("tem passageiros especiais em fila 1");
+                return filaAterrissagem1;
+            } else if (count1 > count2) {
+                System.out.println("tem passageiros especiais em fila 2");
+                return filaAterrissagem2;
+            } else {
+                // Tem que fazer a lógica ainda
                 return filaAterrissagem1;
             }
         }
     }
 
-    public FilaDeEspera escolherFilaDecolagem(){
+    public FilaDeEspera escolherFilaDecolagem() {
         return filaDecolagem;
     }
 
-    public int quantidadeAeronaves(){
+    public int quantidadeAeronaves() {
         return filaAterrissagem1.tamanho() + filaAterrissagem2.tamanho() + filaDecolagem.tamanho();
     }
 
-    public int quantidadeAeronavesAterrissagem(){
+    public int quantidadeAeronaves3() {
+        return filaAterrissagem1.tamanho() + filaDecolagem.tamanho();
+    }
+
+    public int quantidadeAeronavesAterrissagem() {
         return filaAterrissagem1.tamanho() + filaAterrissagem2.tamanho();
     }
 
-    public int quantidadeAeronavesDecolagem(){
+    public int quantidadeAeronavesAterrissagem3() {
+        return filaAterrissagem1.tamanho();
+    }
+
+    public int quantidadeAeronavesDecolagem() {
         return filaDecolagem.tamanho();
     }
 
-    public void setNome(String nome){
-        this.nome = nome;
+    public void somarTempoEspera() {
+        for (Aeronave a : filaAterrissagem1.getFila()) {
+            a.setTempoEspera(a.getTempoEspera() + 1);
+        }
+
+        if (filaAterrissagem2 != null)
+            for (Aeronave a : filaAterrissagem2.getFila()) {
+                a.setTempoEspera(a.getTempoEspera() + 1);
+            }
+
+        for (Aeronave a : filaDecolagem.getFila()) {
+            a.setTempoEspera(a.getTempoEspera() + 1);
+        }
     }
 
-    public String getNome(){
-        return this.nome;
+    public void atualizarCombustivel() {
+        for (Aeronave a : filaAterrissagem1.getFila()) {
+            a.setCombustivel(a.getCombustivel() - 1);
+        }
+
+        for (Aeronave a : filaAterrissagem2.getFila()) {
+            a.setCombustivel(a.getCombustivel() - 1);
+        }
     }
+
+    public double recalcularTempoMedioEspera() {
+        double tempoDeEsperaFilas = 0;
+        double tempoDeEsperaFila1 = filaAterrissagem1.tempoDeEsperaTotal();
+        double tempoDeEsperaFila2 = 0;
+        if (filaAterrissagem2 != null)
+            tempoDeEsperaFila2 = filaAterrissagem2.tempoDeEsperaTotal();
+        double tempoDeEsperaFila3 = filaDecolagem.tempoDeEsperaTotal();
+
+        double qntAeronavesFilas = 0;
+        double qntAeronavesFila1 = filaAterrissagem1.tamanho();
+        double qntAeronavesFila2 = 0;
+        if (filaAterrissagem2 != null)
+            qntAeronavesFila2 = filaAterrissagem2.tamanho();
+        double qntAeronavesFila3 = filaDecolagem.tamanho();
+
+        tempoDeEsperaFilas = tempoDeEsperaFila1 + tempoDeEsperaFila2 + tempoDeEsperaFila3;
+        qntAeronavesFilas = qntAeronavesFila1 + qntAeronavesFila2 + qntAeronavesFila3;
+
+        if (qntAeronavesFilas == 0)
+            return 0;
+
+        else if (tempoDeEsperaFilas == 0)
+            return 0;
+
+        else
+            return tempoDeEsperaFilas / qntAeronavesFilas;
+    }
+
+    public void imprimirTempoMedioDeEspera() {
+        System.out.println("O tempo médio de espera desta " + this.nome + " é: " + recalcularTempoMedioEspera());
+    }
+
+    public void imprimir() {
+        System.out.println("Pista: " + this.nome);
+
+        filaAterrissagem1.imprimirFila();
+        if (filaAterrissagem2 != null)
+            filaAterrissagem2.imprimirFila();
+        filaDecolagem.imprimirFila();
+    }
+
 }

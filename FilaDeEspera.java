@@ -5,8 +5,8 @@ public class FilaDeEspera {
 
     private Queue<Aeronave> fila;
     private int qtdAvioes = 0;
-    private int tempoMedioDeEspera = 0;
-    private int tempoDeEsperaTotal = 0;
+    private double tempoMedioDeEspera = 0;
+    private double tempoDeEsperaTotal = 0;
     private String nome;
 
     public FilaDeEspera() {
@@ -16,33 +16,6 @@ public class FilaDeEspera {
     public FilaDeEspera(String nome) {
         this.fila = new LinkedList<>();
         this.nome = nome;
-    }
-
-    public void adicionarAeronave(Aeronave aeronave) {
-        fila.offer(aeronave);
-        tempoDeEsperaTotal += aeronave.getTempoEspera();
-    }
-
-    public Aeronave removerAeronave() {
-        return fila.poll();
-    }
-
-    public void imprimirQtd(FilaDeEspera fila) {
-
-        qtdAvioes = fila.tamanho();
-        System.out.println("O número de aviões na fila eh: " + qtdAvioes);
-
-    }
-
-    public void imprimirtempoMedioDeEspera(FilaDeEspera fila) {
-
-        tempoMedioDeEspera = tempoDeEsperaTotal / qtdAvioes;
-        System.out.println("O tempo médio de espera eh: " + tempoMedioDeEspera);
-
-    }
-
-    public int tamanho() {
-        return fila.size();
     }
 
     public Queue<Aeronave> getFila() {
@@ -59,5 +32,71 @@ public class FilaDeEspera {
 
     public String getNome() {
         return this.nome;
+    }
+
+    public double setTempoMedioDeEspera() {
+        return this.tempoMedioDeEspera;
+    }
+
+    public void setTempoDeEsperaTotal(double tempoDeEsperaTotal) {
+        this.tempoDeEsperaTotal = tempoDeEsperaTotal;
+    }
+
+    public void adicionarAeronave(Aeronave aeronave) {
+        fila.offer(aeronave);
+        tempoDeEsperaTotal += aeronave.getTempoEspera();
+    }
+
+    public Aeronave removerAeronave() {
+        return fila.poll();
+    }
+
+    public void imprimirQtd() {
+        qtdAvioes = fila.size();
+        System.out.println("O número de aviões na fila eh: " + qtdAvioes);
+    }
+
+    public double tempoDeEsperaTotal() {
+        tempoDeEsperaTotal = 0;
+        for (Aeronave a : fila) {
+            tempoDeEsperaTotal += a.getTempoEspera();
+        }
+
+        if (tempoDeEsperaTotal == 0) {
+            return 0;
+        } else {
+            return tempoDeEsperaTotal;
+        }
+    }
+
+    public int tamanho() {
+        int tamanho = fila.size();
+
+        if (tamanho == 0) {
+            return 0;
+        } else {
+            return tamanho;
+        }
+    }
+
+    public double tempoMedioDeEsperaFila() {
+        if (tempoDeEsperaTotal() == 0 || tamanho() == 0) {
+            return 0;
+        } else {
+            return tempoMedioDeEspera = tempoDeEsperaTotal() / tamanho();
+        }
+    }
+
+    public void imprimirFila() {
+        System.out.println(this.nome + ": " + fila.size());
+        System.out.println("O tempo médio de espera desta " + this.nome + " eh: " + tempoMedioDeEsperaFila());
+        for (Aeronave a : fila) {
+            a.imprimirAeronave();
+        }
+        System.out.println();
+    }
+
+    public double getTempoMedioDeEspera() {
+        return this.tempoMedioDeEspera;
     }
 }
