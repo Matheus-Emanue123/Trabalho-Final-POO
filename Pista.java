@@ -1,4 +1,3 @@
-import java.util.Queue;
 import java.util.LinkedList;
 
 public class Pista {
@@ -89,23 +88,31 @@ public class Pista {
     }
 
     public int quantidadeAeronaves() {
-        return filaAterrissagem1.tamanho() + filaAterrissagem2.tamanho() + filaDecolagem.tamanho();
-    }
-
-    public int quantidadeAeronaves3() {
-        return filaAterrissagem1.tamanho() + filaDecolagem.tamanho();
+        return quantidadeAeronavesAterrissagem() + quantidadeAeronavesDecolagem();
     }
 
     public int quantidadeAeronavesAterrissagem() {
-        return filaAterrissagem1.tamanho() + filaAterrissagem2.tamanho();
-    }
-
-    public int quantidadeAeronavesAterrissagem3() {
-        return filaAterrissagem1.tamanho();
+        if (filaAterrissagem2 == null)
+            return filaAterrissagem1.tamanho();
+        else
+            return filaAterrissagem1.tamanho() + filaAterrissagem2.tamanho();
     }
 
     public int quantidadeAeronavesDecolagem() {
         return filaDecolagem.tamanho();
+    }
+
+    public double tempoEsperaTotalPista() {
+        double tempoFila1 = filaAterrissagem1.tempoDeEsperaTotal();
+        double tempoFila2;
+        if (filaAterrissagem2 == null) {
+            tempoFila2 = 0;
+        } else {
+            tempoFila2 = filaAterrissagem2.tempoDeEsperaTotal();
+        }
+        double tempoFila3 = filaDecolagem.tempoDeEsperaTotal();
+
+        return tempoFila1 + tempoFila2 + tempoFila3;
     }
 
     public void somarTempoEspera() {
@@ -163,6 +170,13 @@ public class Pista {
 
     public void imprimirTempoMedioDeEspera() {
         System.out.println("O tempo médio de espera desta " + this.nome + " é: " + recalcularTempoMedioEspera());
+    }
+
+    public void verificarCombustivelCritico() {
+        filaAterrissagem1.verificarCombustivelCritico();
+        if (filaAterrissagem2 != null)
+            filaAterrissagem2.verificarCombustivelCritico();
+        filaDecolagem.verificarCombustivelCritico();
     }
 
     public void imprimir() {

@@ -83,6 +83,14 @@ public class Aeronave {
         }
     }
 
+    public boolean verificarCombustivelCritico() {
+        if (this.combustivel < 6) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void imprimirAeronave() {
         System.out.println("ID: " + this.id + " - Combustível: " + this.combustivel + " - Tempo de espera: "
                 + this.tempoEspera + " - Passageiro especial: " + this.passageiroEspecial);

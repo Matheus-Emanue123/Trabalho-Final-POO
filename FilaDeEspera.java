@@ -34,6 +34,10 @@ public class FilaDeEspera {
         return this.nome;
     }
 
+    public double getTempoMedioDeEspera() {
+        return this.tempoMedioDeEspera;
+    }
+
     public double setTempoMedioDeEspera() {
         return this.tempoMedioDeEspera;
     }
@@ -49,24 +53,6 @@ public class FilaDeEspera {
 
     public Aeronave removerAeronave() {
         return fila.poll();
-    }
-
-    public void imprimirQtd() {
-        qtdAvioes = fila.size();
-        System.out.println("O número de aviões na fila eh: " + qtdAvioes);
-    }
-
-    public double tempoDeEsperaTotal() {
-        tempoDeEsperaTotal = 0;
-        for (Aeronave a : fila) {
-            tempoDeEsperaTotal += a.getTempoEspera();
-        }
-
-        if (tempoDeEsperaTotal == 0) {
-            return 0;
-        } else {
-            return tempoDeEsperaTotal;
-        }
     }
 
     public int tamanho() {
@@ -87,6 +73,29 @@ public class FilaDeEspera {
         }
     }
 
+    public double tempoDeEsperaTotal() {
+        tempoDeEsperaTotal = 0;
+        for (Aeronave a : fila) {
+            tempoDeEsperaTotal += a.getTempoEspera();
+        }
+
+        if (tempoDeEsperaTotal == 0) {
+            return 0;
+        } else {
+            return tempoDeEsperaTotal;
+        }
+    }
+
+    public void verificarCombustivelCritico() {
+        for (Aeronave a : fila) {
+            boolean auxCombustivel = a.verificarCombustivelCritico();
+
+            if (auxCombustivel) {
+                System.out.println("A aeronave " + a.getId() + " está com combustível crítico!");
+            }
+        }
+    }
+
     public void imprimirFila() {
         System.out.println(this.nome + ": " + fila.size());
         System.out.println("O tempo médio de espera desta " + this.nome + " eh: " + tempoMedioDeEsperaFila());
@@ -96,7 +105,9 @@ public class FilaDeEspera {
         System.out.println();
     }
 
-    public double getTempoMedioDeEspera() {
-        return this.tempoMedioDeEspera;
+    public void imprimirQtd() {
+        qtdAvioes = fila.size();
+        System.out.println("O número de aviões na fila eh: " + qtdAvioes);
     }
+
 }
