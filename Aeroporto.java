@@ -1,10 +1,15 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Aeroporto {
     private Scanner sc = new Scanner(System.in);
+
+    public static Queue<Aeronave> filaAeronavesDecolagemArquivo = new LinkedList<Aeronave>();
+    public static Queue<Aeronave> filaAeronavesAterrissagemArquivo = new LinkedList<Aeronave>();
 
     private Pista pista1;
     private Pista pista2;
@@ -64,6 +69,40 @@ public class Aeroporto {
         this.minutosSimulados++;
         atualizarCombustivel();
         gerarAeronaves();
+
+        if (minutosSimulados % 10 == 0) {
+            mudarClima();
+        }
+
+        imprimirInformacoes();
+
+        System.out.println("-------------");
+        System.out.println("Aviaoes saindo: ");
+        aterrissagem();
+        decolagem();
+
+        somarTempoEspera();
+
+        System.out.println("-------------");
+        System.out.println("Avioes criticos: ");
+        verificarCombustivelCritico();
+
+        sc.nextLine();
+        clearConsole();
+
+        imprimirInformacoes();
+    }
+
+    public void simularMinutoArquivo() {
+        auxContQntAeronavesFilaDecolagem = 0;
+        aterrissagem1 = false;
+        aterrissagem2 = false;
+        aterrissagem3 = false;
+
+        System.out.println("Simulando minuto...");
+        this.minutosSimulados++;
+        atualizarCombustivel();
+        lerAeronave();
 
         if (minutosSimulados % 10 == 0) {
             mudarClima();
@@ -163,6 +202,18 @@ public class Aeroporto {
     }
 
     private void verificarCombustivelCritico() {
+        List<Aeronave> filaCopy3 = new ArrayList<>(pista3.getFilaAterrissagem1().getFila());
+        for (Aeronave aeronave : filaCopy3) {
+            if (aeronave.getCombustivel() == 0) {
+                System.out.println("Aeronave " + aeronave.getId() + " caiu por falta de combustivel.");
+                aeronavesCairam.add(aeronave);
+                pista1.getFilaDecolagem().getFila().remove(aeronave);
+            } else if (aeronave.getCombustivel() < 3) {
+                System.out.println("Aeronave " + aeronave.getId() + " esta com combustivel muito critico.");
+                pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
+            }
+        }
+
         List<Aeronave> filaCopy11 = new ArrayList<>(pista1.getFilaAterrissagem1().getFila());
         for (Aeronave aeronave : filaCopy11) {
             if (aeronave.getCombustivel() == 0) {
@@ -174,6 +225,7 @@ public class Aeroporto {
                 pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
             }
         }
+
         List<Aeronave> filaCopy12 = new ArrayList<>(pista1.getFilaAterrissagem2().getFila());
         for (Aeronave aeronave : filaCopy12) {
             if (aeronave.getCombustivel() == 0) {
@@ -197,24 +249,12 @@ public class Aeroporto {
                 pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
             }
         }
-        List<Aeronave> filaCopy22 = new ArrayList<>(pista2.getFilaAterrissagem1().getFila());
+        List<Aeronave> filaCopy22 = new ArrayList<>(pista2.getFilaAterrissagem2().getFila());
         for (Aeronave aeronave : filaCopy22) {
             if (aeronave.getCombustivel() == 0) {
                 System.out.println("Aeronave " + aeronave.getId() + " caiu por falta de combustivel.");
                 aeronavesCairam.add(aeronave);
                 pista2.getFilaAterrissagem2().getFila().remove(aeronave);
-            } else if (aeronave.getCombustivel() < 3) {
-                System.out.println("Aeronave " + aeronave.getId() + " esta com combustivel muito critico.");
-                pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
-            }
-        }
-
-        List<Aeronave> filaCopy3 = new ArrayList<>(pista3.getFilaAterrissagem1().getFila());
-        for (Aeronave aeronave : filaCopy3) {
-            if (aeronave.getCombustivel() == 0) {
-                System.out.println("Aeronave " + aeronave.getId() + " caiu por falta de combustivel.");
-                aeronavesCairam.add(aeronave);
-                pista1.getFilaDecolagem().getFila().remove(aeronave);
             } else if (aeronave.getCombustivel() < 3) {
                 System.out.println("Aeronave " + aeronave.getId() + " esta com combustivel muito critico.");
                 pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
@@ -234,7 +274,7 @@ public class Aeroporto {
         System.out.println("\nATERRISSAGEM : \nChegando " + aeronavesAterrissagem + " aeronaves para aterrissagem...");
 
         for (int i = 0; i < aeronavesAterrissagem; i++) {
-            System.out.println("\nAviao " + (1 + i) + " de aterrissagem.");
+            System.out.println("\nAviao " + idsAeronavesAterrissagem + " de aterrissagem.");
             int numPassageiros = random.nextInt(380) + 1;
             int combustivel = random.nextInt(15);
             ;
@@ -256,7 +296,7 @@ public class Aeroporto {
         int aeronavesDecolagem = random.nextInt(9);
         System.out.println("\nDECOLAGEM : \n" + "Chegando " + aeronavesDecolagem + " aeronaves para decolagem...");
         for (int i = 0; i < aeronavesDecolagem; i++) {
-            System.out.println("\nAviao " + (1 + i) + " de decolagem.");
+            System.out.println("\nAviao " + idsAeronavesDecolagem + " de decolagem.");
             int numPassageiros = random.nextInt(380) + 1;
             int combustivel = 15;
 
@@ -272,6 +312,49 @@ public class Aeroporto {
         }
 
         System.out.println("Aeronaves geradas com sucesso!");
+        System.out.println("-------------");
+        sc.nextLine();
+        clearConsole();
+    }
+
+    public void lerAeronave() {
+        Random random = new Random();
+
+        clearConsole();
+
+        System.out.println("Gerando aeronaves...");
+
+        int aeronavesAterrissagem = random.nextInt(13);
+
+        if (filaAeronavesAterrissagemArquivo.size() < aeronavesAterrissagem) {
+            aeronavesAterrissagem = filaAeronavesAterrissagemArquivo.size();
+        }
+
+        System.out.println("\nATERRISSAGEM : \nChegando " + aeronavesAterrissagem + " aeronaves para aterrissagem...");
+        for (int i = 0; i < aeronavesAterrissagem; i++) {
+            Aeronave aeronave = (Aeronave) filaAeronavesAterrissagemArquivo.peek();
+            filaAeronavesAterrissagemArquivo.remove();
+            System.out.println("\nAviao " + aeronave.getId() + " de aterrissagem.");
+            adicionarAeronaveFilaAterrisagem(aeronave);
+        }
+
+        System.out.print("-------------");
+
+        int aeronavesDecolagem = random.nextInt(9);
+
+        if (filaAeronavesDecolagemArquivo.size() < aeronavesDecolagem) {
+            aeronavesDecolagem = filaAeronavesDecolagemArquivo.size();
+        }
+
+        System.out.println("\nDECOLAGEM : \n" + "Chegando " + aeronavesDecolagem + " aeronaves para decolagem...");
+        for (int i = 0; i < aeronavesDecolagem; i++) {
+            Aeronave aeronave = (Aeronave) filaAeronavesDecolagemArquivo.peek();
+            filaAeronavesDecolagemArquivo.remove();
+            System.out.println("\nAviao " + aeronave.getId() + " de decolagem.");
+            adicionarAeronaveFilaDecolagem(aeronave);
+        }
+
+        System.out.println("Aeronaves lidas com sucesso!");
         System.out.println("-------------");
         sc.nextLine();
         clearConsole();
@@ -501,5 +584,4 @@ public class Aeroporto {
             e.printStackTrace();
         }
     }
-
 }

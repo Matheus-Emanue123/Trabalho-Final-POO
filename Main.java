@@ -1,20 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
-    static Queue<Aeronave> filaAeronavesDecolagemArquivo = new LinkedList<Aeronave>();
-    static Queue<Aeronave> filaAeronavesAterrissagemArquivo = new LinkedList<Aeronave>();
-
     static Aeroporto aeroporto = new Aeroporto();
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        Aeroporto aeroporto = new Aeroporto();
-
         int escolha = 0;
 
         while (escolha != 3) {
@@ -38,14 +31,10 @@ public class Main {
                     System.out.println("Opcao invalida");
                     break;
             }
-
-            filaAeronavesAterrissagemArquivo = new LinkedList<Aeronave>();
-            filaAeronavesDecolagemArquivo = new LinkedList<Aeronave>();
         }
     }
 
     public static void menuInicial() {
-        aeroporto.clearConsole();
         System.out.println("Escolha uma opcao:");
         System.out.println("1 - Geração aleatória de aeronaves");
         System.out.println("2 - Leitura de arquivo de aeronaves");
@@ -81,7 +70,7 @@ public class Main {
                 aeronave.setIdAterrissagem(Aeroporto.idsAeronavesAterrissagem);
                 Aeroporto.idsAeronavesAterrissagem += 2;
 
-                filaAeronavesAterrissagemArquivo.add(aeronave);
+                Aeroporto.filaAeronavesAterrissagemArquivo.add(aeronave);
             }
 
             arqScanner = new Scanner(new File("aeronavesDecolagem.txt"));
@@ -91,10 +80,38 @@ public class Main {
                 aeronave.setIdDecolagem(Aeroporto.idsAeronavesDecolagem);
                 Aeroporto.idsAeronavesDecolagem += 2;
 
-                filaAeronavesDecolagemArquivo.add(aeronave);
+                Aeroporto.filaAeronavesDecolagemArquivo.add(aeronave);
             }
 
+            System.out.println("Arquivos lidos com sucesso.");
+
             arqScanner.close();
+
+            while (true) {
+                System.out.println("Tem no total " + (Aeroporto.filaAeronavesAterrissagemArquivo.size())
+                        + " aeronaves para aterrisar no arquivo.");
+                System.out.println("Tem no total " + (Aeroporto.filaAeronavesDecolagemArquivo.size())
+                        + " aeronaves para decolar no arquivo.");
+                System.out.println("Tem no total " + (Aeroporto.filaAeronavesAterrissagemArquivo.size()
+                        + Aeroporto.filaAeronavesDecolagemArquivo.size()) + " aeronaves no arquivo.");
+
+                System.out.println("Aperte enter para simular um minuto. Digite 0 para sair.");
+                String enter = scanner.nextLine();
+
+                if (Aeroporto.filaAeronavesAterrissagemArquivo.isEmpty()
+                        && Aeroporto.filaAeronavesDecolagemArquivo.isEmpty()) {
+                    System.out.println("Não há mais aeronaves para simular.");
+                    return;
+                } else {
+                    if (enter.equals("0")) {
+                        System.out.println("Saindo da função arquivo...");
+                        return;
+                    } else {
+                        aeroporto.simularMinutoArquivo();
+                    }
+                }
+            }
+
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
