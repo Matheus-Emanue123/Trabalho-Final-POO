@@ -91,6 +91,7 @@ public class Aeroporto {
         clearConsole();
 
         imprimirInformacoes();
+        imprimirSituacaoCombustivel();
     }
 
     public void simularMinutoArquivo() {
@@ -207,10 +208,9 @@ public class Aeroporto {
             if (aeronave.getCombustivel() == 0) {
                 System.out.println("Aeronave " + aeronave.getId() + " caiu por falta de combustivel.");
                 aeronavesCairam.add(aeronave);
-                pista1.getFilaDecolagem().getFila().remove(aeronave);
+                pista3.getFilaAterrissagem1().getFila().remove(aeronave);
             } else if (aeronave.getCombustivel() < 3) {
                 System.out.println("Aeronave " + aeronave.getId() + " esta com combustivel muito critico.");
-                pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
             }
         }
 
@@ -223,6 +223,7 @@ public class Aeroporto {
             } else if (aeronave.getCombustivel() < 3) {
                 System.out.println("Aeronave " + aeronave.getId() + " esta com combustivel muito critico.");
                 pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
+                pista1.getFilaAterrissagem1().getFila().remove(aeronave);
             }
         }
 
@@ -235,6 +236,7 @@ public class Aeroporto {
             } else if (aeronave.getCombustivel() < 3) {
                 System.out.println("Aeronave " + aeronave.getId() + " esta com combustivel muito critico.");
                 pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
+                pista1.getFilaAterrissagem2().getFila().remove(aeronave);
             }
         }
 
@@ -247,6 +249,7 @@ public class Aeroporto {
             } else if (aeronave.getCombustivel() < 3) {
                 System.out.println("Aeronave " + aeronave.getId() + " esta com combustivel muito critico.");
                 pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
+                pista2.getFilaAterrissagem1().getFila().remove(aeronave);
             }
         }
         List<Aeronave> filaCopy22 = new ArrayList<>(pista2.getFilaAterrissagem2().getFila());
@@ -258,6 +261,7 @@ public class Aeroporto {
             } else if (aeronave.getCombustivel() < 3) {
                 System.out.println("Aeronave " + aeronave.getId() + " esta com combustivel muito critico.");
                 pista3.getFilaAterrissagem1().adicionarAeronave(aeronave);
+                pista2.getFilaAterrissagem2().getFila().remove(aeronave);
             }
         }
     }
@@ -281,7 +285,7 @@ public class Aeroporto {
 
             String companhiaAerea = CompanhiaAerea.values()[random.nextInt(CompanhiaAerea.values().length)].toString();
 
-            boolean passageiroEspecial = (random.nextInt(10) + 1 > 8 ? true : false);
+            boolean passageiroEspecial = random.nextBoolean();
 
             Aeronave aeronave = new Aeronave(numPassageiros, 0, combustivel, companhiaAerea, passageiroEspecial);
             aeronave.setIdAterrissagem(idsAeronavesAterrissagem);
@@ -302,7 +306,7 @@ public class Aeroporto {
 
             String companhiaAerea = CompanhiaAerea.values()[random.nextInt(CompanhiaAerea.values().length)].toString();
 
-            boolean passageiroEspecial = (random.nextInt(10) + 1 > 8 ? true : false);
+            boolean passageiroEspecial = random.nextBoolean();
 
             Aeronave aeronave = new Aeronave(numPassageiros, 0, combustivel, companhiaAerea, passageiroEspecial);
             aeronave.setIdDecolagem(idsAeronavesDecolagem);
@@ -426,6 +430,7 @@ public class Aeroporto {
             pista3.getFilaAterrissagem1().removerAeronave();
             aterrissagem3 = true;
             qntTotalAeronavesSairam++;
+            qtdAterrissagemEmergencial++;
         }
     }
 
@@ -483,6 +488,7 @@ public class Aeroporto {
     public void atualizarCombustivel() {
         pista1.atualizarCombustivel();
         pista2.atualizarCombustivel();
+        pista3.atualizarCombustivel();
     }
 
     public void somarTempoEsperaTotalTodasAeronavesSairam(int tempoEspera) {
@@ -554,8 +560,6 @@ public class Aeroporto {
 
         System.out.println("INFORMACOES DAS PISTAS: ");
         imprimirPistas();
-
-        imprimirSituacaoCombustivel();
     }
 
     public void imprimirPistas() {

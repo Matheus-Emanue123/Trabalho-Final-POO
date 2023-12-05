@@ -48,39 +48,30 @@ public class Pista {
     }
 
     public FilaDeEspera escolherFilaAterrissagem() {
-        if (filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho()) {
+        if (filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho() || filaAterrissagem2 == null) {
             return filaAterrissagem1;
-
-        } else if (filaAterrissagem1.tamanho() > filaAterrissagem2.tamanho()) {
-            return filaAterrissagem2;
-
         } else {
-            int count1 = 0;
-            int count2 = 0;
-
-            for (Aeronave a : filaAterrissagem1.getFila()) {
-                if (a.getPassageiroEspecial()) {
-                    count1++;
-                }
-            }
-
-            for (Aeronave a : filaAterrissagem2.getFila()) {
-                if (a.getPassageiroEspecial()) {
-                    count2++;
-                }
-            }
+            int count1 = contarPassageirosEspeciais(filaAterrissagem1);
+            int count2 = contarPassageirosEspeciais(filaAterrissagem2);
 
             if (count1 < count2) {
                 System.out.println("tem passageiros especiais em fila 1");
                 return filaAterrissagem1;
-            } else if (count1 > count2) {
+            } else {
                 System.out.println("tem passageiros especiais em fila 2");
                 return filaAterrissagem2;
-            } else {
-                // Tem que fazer a lógica ainda
-                return filaAterrissagem1;
             }
         }
+    }
+
+    private int contarPassageirosEspeciais(FilaDeEspera fila) {
+        int count = 0;
+        for (Aeronave a : fila.getFila()) {
+            if (a.getPassageiroEspecial()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public FilaDeEspera escolherFilaDecolagem() {
@@ -135,8 +126,10 @@ public class Pista {
             a.setCombustivel(a.getCombustivel() - 1);
         }
 
-        for (Aeronave a : filaAterrissagem2.getFila()) {
-            a.setCombustivel(a.getCombustivel() - 1);
+        if (filaAterrissagem2 != null) {
+            for (Aeronave a : filaAterrissagem2.getFila()) {
+                a.setCombustivel(a.getCombustivel() - 1);
+            }
         }
     }
 
@@ -187,5 +180,4 @@ public class Pista {
             filaAterrissagem2.imprimirFila();
         filaDecolagem.imprimirFila();
     }
-
 }

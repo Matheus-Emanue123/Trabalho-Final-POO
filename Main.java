@@ -49,41 +49,40 @@ public class Main {
         }
     }
 
-    public static Aeronave linhaAeronave(Scanner arqScanner) {
+    public static void linhaAeronave(Scanner arqScanner) {
         String[] aviaoArrayString = arqScanner.nextLine().split(":");
 
-        int numPassageiros = Integer.parseInt(aviaoArrayString[0]);
-        int combustivel = Integer.parseInt(aviaoArrayString[1]);
-        String companhiaAerea = aviaoArrayString[2];
-        boolean passageiroEspecial = Boolean.parseBoolean(aviaoArrayString[3]);
+        int tipo = Integer.parseInt(aviaoArrayString[0]);
+        int numPassageiros = Integer.parseInt(aviaoArrayString[1]);
+        int combustivel = Integer.parseInt(aviaoArrayString[2]);
+        String companhiaAerea = aviaoArrayString[3];
+        boolean passageiroEspecial = Integer.parseInt(aviaoArrayString[4]) == 1;
 
-        return new Aeronave(numPassageiros, 0, combustivel, companhiaAerea, passageiroEspecial);
+        Aeronave aeronave = new Aeronave(numPassageiros, 0, combustivel, companhiaAerea, passageiroEspecial);
+
+        if (tipo == 0) {
+            aeronave.setIdAterrissagem(Aeroporto.idsAeronavesAterrissagem);
+            Aeroporto.idsAeronavesAterrissagem += 2;
+
+            Aeroporto.filaAeronavesAterrissagemArquivo.add(aeronave);
+        } else {
+            aeronave.setIdDecolagem(Aeroporto.idsAeronavesDecolagem);
+            Aeroporto.idsAeronavesDecolagem += 2;
+
+            Aeroporto.filaAeronavesDecolagemArquivo.add(aeronave);
+        }
     }
 
     public static void leituraArquivoAeronaves() throws FileNotFoundException {
         System.out.println("Lendo arquivo de aeronaves.");
         try {
-            Scanner arqScanner = new Scanner(new File("aeronavesAterrissagem.txt"));
+            Scanner arqScanner = new Scanner(new File("aeronaves.txt"));
 
             while (arqScanner.hasNextLine()) {
-                Aeronave aeronave = linhaAeronave(arqScanner);
-                aeronave.setIdAterrissagem(Aeroporto.idsAeronavesAterrissagem);
-                Aeroporto.idsAeronavesAterrissagem += 2;
-
-                Aeroporto.filaAeronavesAterrissagemArquivo.add(aeronave);
+                linhaAeronave(arqScanner);
             }
 
-            arqScanner = new Scanner(new File("aeronavesDecolagem.txt"));
-
-            while (arqScanner.hasNextLine()) {
-                Aeronave aeronave = linhaAeronave(arqScanner);
-                aeronave.setIdDecolagem(Aeroporto.idsAeronavesDecolagem);
-                Aeroporto.idsAeronavesDecolagem += 2;
-
-                Aeroporto.filaAeronavesDecolagemArquivo.add(aeronave);
-            }
-
-            System.out.println("Arquivos lidos com sucesso.");
+            System.out.println("Arquivo lido com sucesso.");
 
             arqScanner.close();
 
