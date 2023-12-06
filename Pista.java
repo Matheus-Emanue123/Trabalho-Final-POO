@@ -5,6 +5,7 @@ public class Pista {
     private FilaDeEspera filaAterrissagem1;
     private FilaDeEspera filaAterrissagem2;
     private FilaDeEspera filaDecolagem;
+    private int qntPassagueirosEspeciais;
     private String nome;
 
     public Pista() {
@@ -51,8 +52,8 @@ public class Pista {
         if (filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho() || filaAterrissagem2 == null) {
             return filaAterrissagem1;
         } else {
-            int count1 = contarPassageirosEspeciais(filaAterrissagem1);
-            int count2 = contarPassageirosEspeciais(filaAterrissagem2);
+            int count1 = filaAterrissagem1.qntPassagueirosEspeciais();
+            int count2 = filaAterrissagem2.qntPassagueirosEspeciais();
 
             if (count1 < count2) {
                 System.out.println("tem passageiros especiais em fila 1");
@@ -64,14 +65,12 @@ public class Pista {
         }
     }
 
-    private int contarPassageirosEspeciais(FilaDeEspera fila) {
-        int count = 0;
-        for (Aeronave a : fila.getFila()) {
-            if (a.getPassageiroEspecial()) {
-                count++;
-            }
+    public int qntPassagueirosEspeciaisAterrissagem() {
+        qntPassagueirosEspeciais = filaAterrissagem1.qntPassagueirosEspeciais();
+        if (filaAterrissagem2 != null) {
+            qntPassagueirosEspeciais += filaAterrissagem2.qntPassagueirosEspeciais();
         }
-        return count;
+        return qntPassagueirosEspeciais;
     }
 
     public FilaDeEspera escolherFilaDecolagem() {
@@ -91,6 +90,14 @@ public class Pista {
 
     public int quantidadeAeronavesDecolagem() {
         return filaDecolagem.tamanho();
+    }
+
+    public int qntAeronavesCombustivelCriticoAterrissagem() {
+        int qntAeronavesCombustivelCritico = filaAterrissagem1.qntAeronavesCombustivelCritico();
+        if (filaAterrissagem2 != null) {
+            qntAeronavesCombustivelCritico += filaAterrissagem2.qntAeronavesCombustivelCritico();
+        }
+        return qntAeronavesCombustivelCritico;
     }
 
     public double tempoEsperaTotalPista() {

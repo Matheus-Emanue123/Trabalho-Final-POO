@@ -96,6 +96,26 @@ public class FilaDeEspera {
         }
     }
 
+    public int qntPassagueirosEspeciais() {
+        int qtdPassageirosEspeciais = 0;
+        for (Aeronave a : fila) {
+            if (a.getPassageiroEspecial()) {
+                qtdPassageirosEspeciais++;
+            }
+        }
+        return qtdPassageirosEspeciais;
+    }
+
+    public int qntAeronavesCombustivelCritico() {
+        int qtdAeronavesCombustivelCritico = 0;
+        for (Aeronave a : fila) {
+            if (a.verificarCombustivelCritico()) {
+                qtdAeronavesCombustivelCritico++;
+            }
+        }
+        return qtdAeronavesCombustivelCritico;
+    }
+
     public void imprimirFila() {
         System.out.println(this.nome + ": " + fila.size());
         System.out.println("O tempo médio de espera desta " + this.nome + " eh: " + tempoMedioDeEsperaFila());
