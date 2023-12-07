@@ -56,13 +56,7 @@ public class FilaDeEspera {
     }
 
     public int tamanho() {
-        int tamanho = fila.size();
-
-        if (tamanho == 0) {
-            return 0;
-        } else {
-            return tamanho;
-        }
+        return fila.size();
     }
 
     public double tempoMedioDeEsperaFila() {

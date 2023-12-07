@@ -84,11 +84,7 @@ public class Aeronave {
     }
 
     public boolean verificarCombustivelCritico() {
-        if (this.combustivel < 6) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.combustivel < 6;
     }
 
     public void imprimirAeronave() {

@@ -51,6 +51,8 @@ public class Pista {
     public FilaDeEspera escolherFilaAterrissagem() {
         if (filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho() || filaAterrissagem2 == null) {
             return filaAterrissagem1;
+        } else if (filaAterrissagem1.tamanho() > filaAterrissagem2.tamanho()) {
+            return filaAterrissagem2;
         } else {
             int count1 = filaAterrissagem1.qntPassagueirosEspeciais();
             int count2 = filaAterrissagem2.qntPassagueirosEspeciais();
