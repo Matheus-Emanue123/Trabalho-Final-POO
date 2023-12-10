@@ -1,12 +1,13 @@
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Pista {
 
     private FilaDeEspera filaAterrissagem1;
     private FilaDeEspera filaAterrissagem2;
     private FilaDeEspera filaDecolagem;
-    private int qntPassagueirosEspeciais;
     private String nome;
+    private int qtdAterrissagensEmergenciais;
 
     public Pista() {
         this.filaAterrissagem1 = new FilaDeEspera("Fila de Aterrissagem 1");
@@ -28,12 +29,43 @@ public class Pista {
         this.filaDecolagem = new FilaDeEspera("Fila de Decolagem");
     }
 
-    public String getNome() {
-        return this.nome;
+    public void atualizarCombustivel() {
+        for (Aeronave a : filaAterrissagem1.getFila()) {
+            a.setCombustivel(a.getCombustivel() - 1);
+        }
+
+        if (filaAterrissagem2 != null) {
+            for (Aeronave a : filaAterrissagem2.getFila()) {
+                a.setCombustivel(a.getCombustivel() - 1);
+            }
+        }
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    private int contarPassageirosEspeciais(FilaDeEspera fila) {
+        int count = 0;
+        for (Aeronave a : fila.getFila()) {
+            if (a.getPassageiroEspecial()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public FilaDeEspera escolherFilaAterrissagem() {
+        if (filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho() || filaAterrissagem2 == null) {
+            return filaAterrissagem1;
+        } else if (filaAterrissagem1.tamanho() > filaAterrissagem2.tamanho()) {
+            return filaAterrissagem2;
+        } else {
+            int count1 = contarPassageirosEspeciais(filaAterrissagem1);
+            int count2 = contarPassageirosEspeciais(filaAterrissagem2);
+
+            if (count1 < count2) {
+                return filaAterrissagem1;
+            } else {
+                return filaAterrissagem2;
+            }
+        }
     }
 
     public FilaDeEspera getFilaAterrissagem1() {
@@ -48,35 +80,54 @@ public class Pista {
         return this.filaDecolagem;
     }
 
-    public FilaDeEspera escolherFilaAterrissagem() {
-        if (filaAterrissagem1.tamanho() < filaAterrissagem2.tamanho() || filaAterrissagem2 == null) {
-            return filaAterrissagem1;
-        } else if (filaAterrissagem1.tamanho() > filaAterrissagem2.tamanho()) {
-            return filaAterrissagem2;
-        } else {
-            int count1 = filaAterrissagem1.qntPassagueirosEspeciais();
-            int count2 = filaAterrissagem2.qntPassagueirosEspeciais();
-
-            if (count1 < count2) {
-                System.out.println("tem passageiros especiais em fila 1");
-                return filaAterrissagem1;
-            } else {
-                System.out.println("tem passageiros especiais em fila 2");
-                return filaAterrissagem2;
-            }
-        }
+    public String getNome() {
+        return this.nome;
     }
 
-    public int qntPassagueirosEspeciaisAterrissagem() {
-        qntPassagueirosEspeciais = filaAterrissagem1.qntPassagueirosEspeciais();
+    public int getQtdAterrissagensEmergenciais() {
+        return this.qtdAterrissagensEmergenciais;
+    }
+
+    public void imprimir() {
+        System.out.println("Fila de aterrissagem 1: ");
+        filaAterrissagem1.imprimir();
+        System.out.println();
+
         if (filaAterrissagem2 != null) {
-            qntPassagueirosEspeciais += filaAterrissagem2.qntPassagueirosEspeciais();
+            System.out.println("Fila de aterrissagem 2: ");
+            filaAterrissagem2.imprimir();
+            System.out.println();
         }
-        return qntPassagueirosEspeciais;
+
+        System.out.println("Fila de decolagem: ");
+        filaDecolagem.imprimir();
+        System.out.println();
     }
 
-    public FilaDeEspera escolherFilaDecolagem() {
-        return filaDecolagem;
+    public void imprimirInformacoesPista(int n, Scanner sc) {
+        System.out.println("INFORMACOES DA PISTA " + n + ": ");
+        System.out.println("Tempo medio de espera: " + String.format("%.2f", recalcularTempoMedioEspera()));
+        System.out.println(
+                "Quantidade de aeronaves que realizaram aterrissagens emergenciais: "
+                        + this.qtdAterrissagensEmergenciais);
+        System.out.println("Total de aeronaves em espera: " + quantidadeAeronaves());
+        System.out
+                .println("Total de aeronaves em espera para aterrissagem: " + quantidadeAeronavesAterrissagem());
+        System.out.println("Total de aeronaves em espera para decolagem: " + quantidadeAeronavesDecolagem());
+
+        do {
+            System.out.println("Deseja ver as filas de espera? (S/N)");
+            String escolha = sc.nextLine();
+
+            if (escolha.equals("S") || escolha.equals("s")) {
+                System.out.println();
+                imprimir();
+            } else if (escolha.equals("N") || escolha.equals("n")) {
+                return;
+            } else {
+                System.out.println("Opcao invalida!");
+            }
+        } while (true);
     }
 
     public int quantidadeAeronaves() {
@@ -94,25 +145,42 @@ public class Pista {
         return filaDecolagem.tamanho();
     }
 
-    public int qntAeronavesCombustivelCriticoAterrissagem() {
-        int qntAeronavesCombustivelCritico = filaAterrissagem1.qntAeronavesCombustivelCritico();
-        if (filaAterrissagem2 != null) {
-            qntAeronavesCombustivelCritico += filaAterrissagem2.qntAeronavesCombustivelCritico();
-        }
-        return qntAeronavesCombustivelCritico;
+    public double recalcularTempoMedioEspera() {
+        double tempoDeEsperaFilas;
+        double tempoDeEsperaFila1 = filaAterrissagem1.tempoDeEsperaTotal()
+                + filaAterrissagem1.getTempoEsperaAeronavesSairam();
+        double tempoDeEsperaFila2 = 0;
+        if (filaAterrissagem2 != null)
+            tempoDeEsperaFila2 = filaAterrissagem2.tempoDeEsperaTotal()
+                    + filaAterrissagem2.getTempoEsperaAeronavesSairam();
+        double tempoDeEsperaFila3 = filaDecolagem.tempoDeEsperaTotal();
+
+        double qntAeronavesFilas;
+        double qntAeronavesFila1 = filaAterrissagem1.tamanho() + filaAterrissagem1.getQtdAeronavesSairam();
+        double qntAeronavesFila2 = 0;
+        if (filaAterrissagem2 != null)
+            qntAeronavesFila2 = filaAterrissagem2.tamanho() + filaAterrissagem2.getQtdAeronavesSairam();
+        double qntAeronavesFila3 = filaDecolagem.tamanho() + filaDecolagem.getQtdAeronavesSairam();
+
+        tempoDeEsperaFilas = tempoDeEsperaFila1 + tempoDeEsperaFila2 + tempoDeEsperaFila3;
+        qntAeronavesFilas = qntAeronavesFila1 + qntAeronavesFila2 + qntAeronavesFila3;
+
+        if (qntAeronavesFilas == 0)
+            return 0;
+
+        else if (tempoDeEsperaFilas == 0)
+            return 0;
+
+        else
+            return tempoDeEsperaFilas / qntAeronavesFilas;
     }
 
-    public double tempoEsperaTotalPista() {
-        double tempoFila1 = filaAterrissagem1.tempoDeEsperaTotal();
-        double tempoFila2;
-        if (filaAterrissagem2 == null) {
-            tempoFila2 = 0;
-        } else {
-            tempoFila2 = filaAterrissagem2.tempoDeEsperaTotal();
-        }
-        double tempoFila3 = filaDecolagem.tempoDeEsperaTotal();
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-        return tempoFila1 + tempoFila2 + tempoFila3;
+    public void setQtdAterrissagensEmergenciais(int qtd) {
+        this.qtdAterrissagensEmergenciais = qtd;
     }
 
     public void somarTempoEspera() {
@@ -130,63 +198,17 @@ public class Pista {
         }
     }
 
-    public void atualizarCombustivel() {
-        for (Aeronave a : filaAterrissagem1.getFila()) {
-            a.setCombustivel(a.getCombustivel() - 1);
+    public double tempoEsperaTotalPista() {
+        double tempoFila1 = filaAterrissagem1.tempoDeEsperaTotal();
+        double tempoFila2;
+        if (filaAterrissagem2 == null) {
+            tempoFila2 = 0;
+        } else {
+            tempoFila2 = filaAterrissagem2.tempoDeEsperaTotal();
         }
+        double tempoFila3 = filaDecolagem.tempoDeEsperaTotal();
 
-        if (filaAterrissagem2 != null) {
-            for (Aeronave a : filaAterrissagem2.getFila()) {
-                a.setCombustivel(a.getCombustivel() - 1);
-            }
-        }
+        return tempoFila1 + tempoFila2 + tempoFila3;
     }
 
-    public double recalcularTempoMedioEspera() {
-        double tempoDeEsperaFilas = 0;
-        double tempoDeEsperaFila1 = filaAterrissagem1.tempoDeEsperaTotal();
-        double tempoDeEsperaFila2 = 0;
-        if (filaAterrissagem2 != null)
-            tempoDeEsperaFila2 = filaAterrissagem2.tempoDeEsperaTotal();
-        double tempoDeEsperaFila3 = filaDecolagem.tempoDeEsperaTotal();
-
-        double qntAeronavesFilas = 0;
-        double qntAeronavesFila1 = filaAterrissagem1.tamanho();
-        double qntAeronavesFila2 = 0;
-        if (filaAterrissagem2 != null)
-            qntAeronavesFila2 = filaAterrissagem2.tamanho();
-        double qntAeronavesFila3 = filaDecolagem.tamanho();
-
-        tempoDeEsperaFilas = tempoDeEsperaFila1 + tempoDeEsperaFila2 + tempoDeEsperaFila3;
-        qntAeronavesFilas = qntAeronavesFila1 + qntAeronavesFila2 + qntAeronavesFila3;
-
-        if (qntAeronavesFilas == 0)
-            return 0;
-
-        else if (tempoDeEsperaFilas == 0)
-            return 0;
-
-        else
-            return tempoDeEsperaFilas / qntAeronavesFilas;
-    }
-
-    public void imprimirTempoMedioDeEspera() {
-        System.out.println("O tempo médio de espera desta " + this.nome + " é: " + recalcularTempoMedioEspera());
-    }
-
-    public void verificarCombustivelCritico() {
-        filaAterrissagem1.verificarCombustivelCritico();
-        if (filaAterrissagem2 != null)
-            filaAterrissagem2.verificarCombustivelCritico();
-        filaDecolagem.verificarCombustivelCritico();
-    }
-
-    public void imprimir() {
-        System.out.println("Pista: " + this.nome);
-
-        filaAterrissagem1.imprimirFila();
-        if (filaAterrissagem2 != null)
-            filaAterrissagem2.imprimirFila();
-        filaDecolagem.imprimirFila();
-    }
 }

@@ -1,13 +1,17 @@
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.LinkedList;
 
 public class FilaDeEspera {
 
     private Queue<Aeronave> fila;
-    private int qtdAvioes = 0;
     private double tempoMedioDeEspera = 0;
     private double tempoDeEsperaTotal = 0;
     private String nome;
+    private int qtdAterrissagensEmergenciais;
+    private int qtdAeronavesDecolaram;
+    private int qtdAeronavesSairam;
+    private double tempoEsperaAeronavesSairam;
 
     public FilaDeEspera() {
         this.fila = new LinkedList<>();
@@ -16,34 +20,9 @@ public class FilaDeEspera {
     public FilaDeEspera(String nome) {
         this.fila = new LinkedList<>();
         this.nome = nome;
-    }
-
-    public Queue<Aeronave> getFila() {
-        return this.fila;
-    }
-
-    public void setFila(Queue<Aeronave> fila) {
-        this.fila = fila;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getNome() {
-        return this.nome;
-    }
-
-    public double getTempoMedioDeEspera() {
-        return this.tempoMedioDeEspera;
-    }
-
-    public double setTempoMedioDeEspera() {
-        return this.tempoMedioDeEspera;
-    }
-
-    public void setTempoDeEsperaTotal(double tempoDeEsperaTotal) {
-        this.tempoDeEsperaTotal = tempoDeEsperaTotal;
+        if (!nome.equals("Fila de Decolagem")) {
+            this.qtdAeronavesDecolaram = -1;
+        }
     }
 
     public void adicionarAeronave(Aeronave aeronave) {
@@ -51,53 +30,66 @@ public class FilaDeEspera {
         tempoDeEsperaTotal += aeronave.getTempoEspera();
     }
 
-    public Aeronave removerAeronave() {
-        return fila.poll();
+    public Queue<Aeronave> getFila() {
+        return this.fila;
     }
 
-    public int tamanho() {
-        return fila.size();
+    public String getNome() {
+        return this.nome;
     }
 
-    public double tempoMedioDeEsperaFila() {
-        if (tempoDeEsperaTotal() == 0 || tamanho() == 0) {
-            return 0;
-        } else {
-            return tempoMedioDeEspera = tempoDeEsperaTotal() / tamanho();
+    public int getQtdAeronavesDecolaram() {
+        return this.qtdAeronavesDecolaram;
+    }
+
+    public int getQtdAeronavesSairam() {
+        return this.qtdAeronavesSairam;
+    }
+
+    public int getQtdAterrissagensEmergenciais() {
+        return this.qtdAterrissagensEmergenciais;
+    }
+
+    public double getTempoEsperaAeronavesSairam() {
+        return this.tempoEsperaAeronavesSairam;
+    }
+
+    public double getTempoMedioDeEspera() {
+        return this.tempoMedioDeEspera;
+    }
+
+    public void imprimir() {
+        if (fila.isEmpty()) {
+            System.out.println("Fila vazia!");
+            return;
         }
-    }
 
-    public double tempoDeEsperaTotal() {
-        tempoDeEsperaTotal = 0;
         for (Aeronave a : fila) {
-            tempoDeEsperaTotal += a.getTempoEspera();
-        }
-
-        if (tempoDeEsperaTotal == 0) {
-            return 0;
-        } else {
-            return tempoDeEsperaTotal;
+            a.imprimir();
         }
     }
 
-    public void verificarCombustivelCritico() {
-        for (Aeronave a : fila) {
-            boolean auxCombustivel = a.verificarCombustivelCritico();
+    public void imprimirInformacoesFila(int n, Scanner sc) {
+        System.out.println("INFORMACOES DA Fila " + n + ": ");
+        System.out.println("Tempo medio de espera: " + String.format("%.2f", tempoMedioDeEsperaFila()));
+        System.out.println(
+                "Quantidade de aeronaves que realizaram aterrissagens emergenciais: "
+                        + this.qtdAterrissagensEmergenciais);
+        System.out.println("Total de aeronaves em espera: " + tamanho());
 
-            if (auxCombustivel) {
-                System.out.println("A aeronave " + a.getId() + " está com combustível crítico!");
+        do {
+            System.out.println("Deseja ver as aeronaves desta fila? (S/N)");
+            String escolha = sc.nextLine();
+
+            if (escolha.equals("S") || escolha.equals("s")) {
+                System.out.println();
+                imprimir();
+            } else if (escolha.equals("N") || escolha.equals("n")) {
+                return;
+            } else {
+                System.out.println("Opcao invalida!");
             }
-        }
-    }
-
-    public int qntPassagueirosEspeciais() {
-        int qtdPassageirosEspeciais = 0;
-        for (Aeronave a : fila) {
-            if (a.getPassageiroEspecial()) {
-                qtdPassageirosEspeciais++;
-            }
-        }
-        return qtdPassageirosEspeciais;
+        } while (true);
     }
 
     public int qntAeronavesCombustivelCritico() {
@@ -110,18 +102,87 @@ public class FilaDeEspera {
         return qtdAeronavesCombustivelCritico;
     }
 
-    public void imprimirFila() {
-        System.out.println(this.nome + ": " + fila.size());
-        System.out.println("O tempo médio de espera desta " + this.nome + " eh: " + tempoMedioDeEsperaFila());
+    public int qntPassagueirosEspeciais() {
+        int qtdPassageirosEspeciais = 0;
         for (Aeronave a : fila) {
-            a.imprimirAeronave();
+            if (a.getPassageiroEspecial()) {
+                qtdPassageirosEspeciais++;
+            }
         }
-        System.out.println();
+        return qtdPassageirosEspeciais;
     }
 
-    public void imprimirQtd() {
-        qtdAvioes = fila.size();
-        System.out.println("O número de aviões na fila eh: " + qtdAvioes);
+    public void removerAeronave() {
+        fila.poll();
     }
 
+    public void setFila(Queue<Aeronave> fila) {
+        this.fila = fila;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setQtdAeronavesDecolaram(int qtd) {
+        this.qtdAeronavesDecolaram = qtd;
+    }
+
+    public void setQtdAeronavesSairam(int qtd) {
+        this.qtdAeronavesSairam = qtd;
+    }
+
+    public void setQtdAterrissagensEmergenciais(int qtd) {
+        this.qtdAterrissagensEmergenciais = qtd;
+    }
+
+    public void setTempoDeEsperaTotal(double tempoDeEsperaTotal) {
+        this.tempoDeEsperaTotal = tempoDeEsperaTotal;
+    }
+
+    public void setTempoEsperaAeronavesSairam(double tempo) {
+        this.tempoEsperaAeronavesSairam = tempo;
+    }
+
+    public double setTempoMedioDeEspera() {
+        return this.tempoMedioDeEspera;
+    }
+
+    public int tamanho() {
+        return fila.size();
+    }
+
+    public double tempoDeEsperaTotal() {
+        tempoDeEsperaTotal = 0;
+        for (Aeronave a : fila) {
+            tempoDeEsperaTotal += a.getTempoEspera();
+        }
+
+        return tempoDeEsperaTotal + tempoEsperaAeronavesSairam;
+    }
+
+    public double tempoMedioDeEsperaFila() {
+        if (tempoDeEsperaTotal() + tempoEsperaAeronavesSairam == 0 || tamanho() + qtdAeronavesSairam == 0) {
+            return 0;
+        } else {
+            return tempoMedioDeEspera = tempoDeEsperaTotal() / (tamanho() + getQtdAeronavesSairam());
+        }
+    }
+
+    public void verificarCombustivelCritico() {
+        int aux = 0;
+        for (Aeronave a : fila) {
+            boolean auxCombustivel = a.verificarCombustivelCritico();
+
+            if (auxCombustivel) {
+                System.out.println(
+                        "A aeronave " + a.getId() + " está com combustível crítico (" + a.getCombustivel() + ")!");
+                aux++;
+            }
+        }
+
+        if (aux == 0 || fila.isEmpty()) {
+            System.out.println("Nao possui nenhuma aeronave com combustível crítico!");
+        }
+    }
 }
