@@ -36,7 +36,7 @@ public class Main {
 
     public static void aeronavesAleatorias() {
         while (true) {
-            System.out.println("Aperte enter para simular um minuto. Digite 0 para sair.");
+            System.out.println("Aperte ENTER para simular um minuto. Digite 0 para sair.");
             String enter = scanner.nextLine();
 
             if (enter.equals("0")) {
@@ -78,7 +78,7 @@ public class Main {
                         System.out.println("1 - Pista 1");
                         System.out.println("2 - Pista 2");
                         System.out.println("3 - Pista 3");
-                        System.out.println("0 - Sair");
+                        System.out.println("0 - Voltar");
 
                         escolhaPista = scanner.nextInt();
                         scanner.nextLine();
@@ -113,7 +113,7 @@ public class Main {
                         System.out.println("1 - Fila de Aterrissagem 1");
                         System.out.println("2 - Fila de Aterrissagem 2");
                         System.out.println("3 - Fila de Decolagem");
-                        System.out.println("0 - Sair");
+                        System.out.println("0 - Voltar");
                         escolhaFila = scanner.nextInt();
                         scanner.nextLine();
 
@@ -175,7 +175,7 @@ public class Main {
     }
 
     public static void leituraArquivoAeronaves() throws FileNotFoundException {
-        System.out.println("Lendo arquivo de aeronaves.");
+        System.out.println("Lendo arquivo de aeronaves...");
         try {
             Scanner arqScanner = new Scanner(new File("aeronaves.txt"));
 
@@ -183,11 +183,14 @@ public class Main {
                 linhaAeronave(arqScanner);
             }
 
+            System.out.println("-------------------------");
             System.out.println("Arquivo lido com sucesso.");
 
             arqScanner.close();
 
             while (true) {
+                System.out.println("-------------------------");
+                System.out.println("Informações sobre o arquivo: ");
                 System.out.println("Tem no total " + (Aeroporto.filaAeronavesAterrissagemArquivo.size())
                         + " aeronaves para aterrisar no arquivo.");
                 System.out.println("Tem no total " + (Aeroporto.filaAeronavesDecolagemArquivo.size())
@@ -195,12 +198,19 @@ public class Main {
                 System.out.println("Tem no total " + (Aeroporto.filaAeronavesAterrissagemArquivo.size()
                         + Aeroporto.filaAeronavesDecolagemArquivo.size()) + " aeronaves no arquivo.");
 
-                System.out.println("Aperte enter para simular um minuto. Digite 0 para sair.");
+                System.out.println("-------------------------\n");
+                System.out.println("Aperte ENTER para simular um minuto. Digite 0 para sair.");
                 String enter = scanner.nextLine();
 
                 if (Aeroporto.filaAeronavesAterrissagemArquivo.isEmpty()
                         && Aeroporto.filaAeronavesDecolagemArquivo.isEmpty()) {
                     System.out.println("Não há mais aeronaves para simular.");
+                    scanner.nextLine();
+                    imprimirInformacoes();
+
+                    System.out.println("Voltando para o menu inicial...");
+                    scanner.nextLine();
+                    aeroporto.clearConsole();
                     return;
                 } else {
 
@@ -251,10 +261,12 @@ public class Main {
         System.out.println("4 - Informações sobre as filas de espera");
         System.out.println("5 - Aeronaves de combustível crítico");
         System.out.println("6 - Ver as aeronaves");
-        System.out.println("0 - Sair");
+        System.out.println("0 - Voltar para simular outro minuto");
     }
 
     public static void menuInicial() {
+        aeroporto.clearConsole();
+        System.out.println("MENU INICIAL");
         System.out.println("Escolha uma opcao:");
         System.out.println("1 - Geração aleatória de aeronaves");
         System.out.println("2 - Leitura de arquivo de aeronaves");
